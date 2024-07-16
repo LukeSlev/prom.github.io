@@ -6,55 +6,48 @@
 <title>Interactive Promposal</title>
 <style>
   body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
   }
-  
+  .container {
+      text-align: center;
+  }
   #message {
-    font-size: 24px;
-    margin-bottom: 20px;
+      font-size: 24px;
+      margin-bottom: 20px;
   }
-  
   #buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+      margin-top: 20px;
   }
-  
-  .button {
-    padding: 10px 20px;
-    font-size: 18px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    transition: background-color 0.3s ease;
+  button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      outline: none;
   }
-  
-  .button:hover {
-    background-color: #e0e0e0;
-  }
-  
-  #no-button {
-    position: relative;
-    top: 0;
-    transition: top 0.5s ease;
-  }
-  
-  #no-button.move {
-    top: 50px;
+  button:hover {
+      background-color: #0056b3;
   }
 </style>
 </head>
 <body>
-<div id="message">Loading...</div>
-<div id="buttons">
-  <button id="yes-button" class="button">Yes</button>
-  <button id="no-button" class="button">No</button>
+
+<div class="container">
+  <div id="message">Loading...</div>
+  <div id="buttons">
+      <button id="yes-button"">Yes</button>
+      <button id="no-button"">No</button>
+  </div>
 </div>
 
 <script>
@@ -70,7 +63,18 @@
     if (event.target.id === 'yes-button') {
       window.location.href = 'https://www.youtube.com/watch?v=3GwjfUFyY6M'; // celebration
     } else if (event.target.id === 'no-button') {
-      document.getElementById('no-button').classList.add('move');
+      // Move the No button to a random position on the page
+      const maxX = window.innerWidth - noButton.offsetWidth;
+      const maxY = window.innerHeight - noButton.offsetHeight;
+      const newX = Math.random() * maxX;
+      const newY = Math.random() * maxY;
+      
+      noButton.style.left = `${newX}px`;
+      noButton.style.top = `${newY}px`;
+
+      // Change color of the No button
+      const randomColor = generateRandomColor();
+      noButton.style.backgroundColor = randomColor;
     }
   }
 
@@ -83,10 +87,20 @@
       document.getElementById('message').textContent = message;
     } else {
       document.getElementById('message').textContent = 'This is not the page you are looking for...';
+      document.getElementById('buttons').innerHTML = "";
     }
 
     document.getElementById('yes-button').addEventListener('click', handleButtonClick);
     document.getElementById('no-button').addEventListener('click', handleButtonClick);
+  }
+
+  function generateRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
   }
 
   // Initialize the page when the DOM is fully loaded
