@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Promposal</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  #message {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  #buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  #no-button {
+    position: relative;
+    top: 0;
+    transition: top 0.5s ease;
+  }
+  
+  #no-button.move {
+    top: 50px;
+  }
+</style>
+</head>
+<body>
+<div id="message">Loading...</div>
+<div id="buttons">
+  <button id="yes-button" class="button">Yes</button>
+  <button id="no-button" class="button">No</button>
+</div>
+
+<script>
+  // Function to decode base64 encoded string from query parameter
+  function decodeBase64QueryParam(param) {
+    const base64 = param.replace(/-/g, '+').replace(/_/g, '/');
+    const decoded = atob(base64);
+    return decoded;
+  }
+
+  // Function to handle button click events
+  function handleButtonClick(event) {
+    if (event.target.id === 'yes-button') {
+      window.location.href = 'https://www.youtube.com/watch?v=3GwjfUFyY6M'; // celebration
+    } else if (event.target.id === 'no-button') {
+      document.getElementById('no-button').classList.add('move');
+    }
+  }
+
+  // Function to initialize the page
+  function initializePage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const base64EncodedMessage = urlParams.get('message');
+    if (base64EncodedMessage) {
+      const message = decodeBase64QueryParam(base64EncodedMessage);
+      document.getElementById('message').textContent = message;
+    } else {
+      document.getElementById('message').textContent = 'This isn't the page you're looking for...';
+    }
+
+    document.getElementById('yes-button').addEventListener('click', handleButtonClick);
+    document.getElementById('no-button').addEventListener('click', handleButtonClick);
+  }
+
+  // Initialize the page when the DOM is fully loaded
+  document.addEventListener('DOMContentLoaded', initializePage);
+</script>
+</body>
+</html>
