@@ -43,7 +43,7 @@
 </head>
 <body>
 
-<audio id="elevatorMusic" autoplay loop>
+<audio id="elevatorMusic" loop>
   <source src="elevator-music.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
@@ -52,6 +52,7 @@
   <div id="message">Loading...</div>
   <div id="buttons">
       <button id="yes-button"">Yes</button>
+      <span/>
       <button id="no-button"">No</button>
   </div>
 </div>
@@ -64,6 +65,32 @@
     return decoded;
   }
 
+  function generateRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+  }
+
+  function isOverlap(x, y, rect) {
+    // Check if new position overlaps with existing button
+    const noButton = document.getElementById('no-button');
+    const yesButton = document.getElementById('yes-button');
+
+    const buttonRect = rect || yesButton.getBoundingClientRect();
+    const buttonLeft = parseFloat(yesButton.style.left) || buttonRect.left;
+    const buttonTop = parseFloat(yesButton.style.top) || buttonRect.top;
+    
+    return (
+        x >= buttonLeft &&
+        x <= buttonLeft + buttonRect.width &&
+        y >= buttonTop &&
+        y <= buttonTop + buttonRect.height
+    );
+  }
+
   // Function to handle button click events
   function handleButtonClick(event) {
     if (event.target.id === 'yes-button') {
@@ -73,8 +100,13 @@
       const noButton = document.getElementById('no-button');
       const maxX = window.innerWidth - noButton.offsetWidth;
       const maxY = window.innerHeight - noButton.offsetHeight;
-      const newX = Math.random() * maxX;
-      const newY = Math.random() * maxY;
+      // Move the No button to a random position on the page
+      let newX, newY;
+      do {
+          newX = Math.random() * maxX;
+          newY = Math.random() * maxY;
+      } while (isOverlap(newX, newY, buttonRect));
+      
       
       noButton.style.left = `${newX}px`;
       noButton.style.top = `${newY}px`;
@@ -83,6 +115,11 @@
       const randomColor = generateRandomColor();
       noButton.style.backgroundColor = randomColor;
     }
+  }
+
+  function musicPlay() {
+    document.getElementById('elevatorMusic').play();
+    document.removeEventListener('click', musicPlay);
   }
 
   // Function to initialize the page
@@ -99,15 +136,8 @@
 
     document.getElementById('yes-button').addEventListener('click', handleButtonClick);
     document.getElementById('no-button').addEventListener('click', handleButtonClick);
-  }
 
-  function generateRandomColor() {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
+    document.addEventListener('click', musicPlay);
   }
 
   // Initialize the page when the DOM is fully loaded
