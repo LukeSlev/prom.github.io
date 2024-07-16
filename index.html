@@ -64,6 +64,7 @@
       window.location.href = 'https://www.youtube.com/watch?v=3GwjfUFyY6M'; // celebration
     } else if (event.target.id === 'no-button') {
       // Move the No button to a random position on the page
+      const noButton = document.getElementById('no-button');
       const maxX = window.innerWidth - noButton.offsetWidth;
       const maxY = window.innerHeight - noButton.offsetHeight;
       const newX = Math.random() * maxX;
